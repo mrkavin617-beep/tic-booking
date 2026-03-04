@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MNT Movies – 3D Booking</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  background:radial-gradient(circle at top,#111 0%,#000 60%);
+  font-family:Inter,sans-serif;
+  color:#fff;
+  padding:40px;
+}
+
+h1{
+  color:#e50914;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.movies{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:40px;
+  perspective:1200px;
+}
+
+.movie-card{
+  position:relative;
+  height:380px;
+  border-radius:20px;
+  transform-style:preserve-3d;
+  transition:transform .4s ease, box-shadow .4s;
+  box-shadow:0 30px 60px rgba(0,0,0,.6);
+  cursor:pointer;
+}
+
+.movie-card:hover{
+  transform:rotateY(10deg) rotateX(5deg) translateY(-10px);
+  box-shadow:0 50px 90px rgba(229,9,20,.4);
+}
+
+.movie-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:20px;
+}
+
+.movie-info{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  padding:20px;
+  background:linear-gradient(to top,rgba(0,0,0,.9),transparent);
+  border-radius:0 0 20px 20px;
+  transform:translateZ(40px);
+}
+
+.movie-info h3{
+  margin:0;
+  font-size:20px;
+}
+
+.movie-info button{
+  margin-top:10px;
+  padding:10px 18px;
+  border:none;
+  background:#e50914;
+  color:#fff;
+  font-weight:600;
+  border-radius:30px;
+  cursor:pointer;
+}
+
+/* BOOKING */
+#booking{
+  display:none;
+  margin-top:60px;
+}
+
+.screen{
+  text-align:center;
+  background:#fff;
+  color:#000;
+  padding:6px;
+  width:60%;
+  margin:0 auto 30px;
+  border-radius:0 0 20px 20px;
+  box-shadow:0 15px 40px rgba(255,255,255,.4);
+}
+
+.seats{
+  display:grid;
+  grid-template-columns:repeat(8,42px);
+  gap:14px;
+  justify-content:center;
+}
+
+.seat{
+  width:42px;
+  height:42px;
+  background:linear-gradient(145deg,#2d2d38,#1b1b23);
+  border-radius:12px;
+  box-shadow:inset 3px 3px 6px #000,
+             inset -3px -3px 6px #333;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.seat:hover{
+  transform:translateY(-4px);
+}
+
+.seat.selected{
+  background:#e50914;
+  box-shadow:0 10px 25px rgba(229,9,20,.7);
+}
+
+#confirm{
+  margin:30px auto;
+  display:block;
+  padding:14px 40px;
+  font-size:16px;
+  border:none;
+  border-radius:40px;
+  background:#e50914;
+  color:#fff;
+  cursor:pointer;
+}
+
+#qr{
+  margin-top:30px;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎥 NRS Movies – 3D Experience</h1>
+
+<div class="movies">
+  <div class="movie-card">
+    <img src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4">
+    <div class="movie-info">
+      <h3>Action Hero</h3>
+      <button onclick="openBooking('Action Hero')">Book Now</button>
+    </div>
+  </div>
+
+  <div class="movie-card">
+    <img src="https://images.unsplash.com/photo-1502139214982-d0ad755818d8">
+    <div class="movie-info">
+      <h3>Romantic Night</h3>
+      <button onclick="openBooking('Romantic Night')">Book Now</button>
+    </div>
+  </div>
+
+  <div class="movie-card">
+    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1">
+    <div class="movie-info">
+      <h3>Sci-Fi World</h3>
+      <button onclick="openBooking('Sci-Fi World')">Book Now</button>
+    </div>
+  </div>
+</div>
+
+<div id="booking">
+  <h2 id="movieTitle"></h2>
+
+  <div class="screen">SCREEN</div>
+
+  <div class="seats" id="seats"></div>
+
+  <button id="confirm" onclick="confirmBooking()">Confirm & Generate QR</button>
+
+  <div id="qr"></div>
+</div>
+
+<script>
+let selectedSeats=[];
+let currentMovie="";
+
+function openBooking(movie){
+  currentMovie=movie;
+  selectedSeats=[];
+  document.getElementById("qr").innerHTML="";
+  document.getElementById("booking").style.display="block";
+  document.getElementById("movieTitle").innerText=movie;
+
+  const seats=document.getElementById("seats");
+  seats.innerHTML="";
+  for(let i=1;i<=32;i++){
+    const s=document.createElement("div");
+    s.className="seat";
+    s.onclick=()=>toggleSeat(s,i);
+    seats.appendChild(s);
+  }
+}
+
+function toggleSeat(seat,n){
+  seat.classList.toggle("selected");
+  selectedSeats.includes(n)
+    ? selectedSeats=selectedSeats.filter(x=>x!==n)
+    : selectedSeats.push(n);
+}
+
+function confirmBooking(){
+  if(selectedSeats.length===0){
+    alert("No seats selected");
+    return;
+  }
+  document.getElementById("qr").innerHTML="<h3>Your 3D Ticket QR</h3>";
+  new QRCode(document.getElementById("qr"),{
+    text:`Movie:${currentMovie} | Seats:${selectedSeats.join(",")} | ${new Date()}`,
+    width:180,
+    height:180
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NRS Events – Movies</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<button class="cash" onclick="showQR()">booking</button>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+body{background:#0b0b0f;color:#fff}
+
+/* NAVBAR */
+.navbar{
+  position:sticky;top:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 30px;background:#111
+}
+.logo{font-size:22px;font-weight:700;color:#e50914}
+.menu{display:flex;gap:22px}
+.menu a{color:#ccc;text-decoration:none;font-size:14px}
+.menu a:hover{color:#fff}
+.search input{
+  background:#1c1c25;border:none;
+  padding:9px 16px;border-radius:20px;
+  color:#fff;width:220px
+}
+
+/* BANNER */
+.banner{overflow:hidden;margin:20px;border-radius:18px}
+.banner-track{display:flex;width:max-content;animation:scroll 30s linear infinite}
+.banner img{
+  width:420px;height:220px;object-fit:cover;
+  margin-right:20px;border-radius:18px
+}
+@keyframes scroll{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* GRID */
+.grid{
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:22px
+}
+
+/* CARD */
+.card{
+  background:#14141c;border-radius:16px;
+  overflow:hidden;transition:.3s
+}
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 40px rgba(0,0,0,.6)
+}
+.poster{height:220px;background-size:cover;background-position:center}
+.card-body{padding:14px}
+.card-body h3{font-size:17px}
+.card-body p{font-size:13px;color:#bbb;margin:4px 0}
+.card-body button{
+  margin-top:10px;width:100%;
+  padding:10px;background:#e50914;
+  border:none;border-radius:20px;
+  color:#fff;font-weight:600;cursor:pointer
+}
+
+.banner{
+  overflow:hidden;
+  margin:20px;
+  border-radius:18px;
+}
+
+.banner-track{
+  display:flex;
+  width:fit-content;
+  animation:bannerScroll 25s linear infinite;
+}
+
+.banner img{
+  width:420px;
+  height:220px;
+  object-fit:cover;
+  margin-right:20px;
+  border-radius:18px;
+  flex-shrink:0;
+}
+
+@keyframes bannerScroll{
+  0%{
+    transform:translateX(0);
+  }
+  100%{
+    transform:translateX(-50%);
+  }
+}
+
+
+/* MODAL */
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.75);
+  display:none;align-items:center;justify-content:center;
+  z-index:200
+}
+.modal-box{
+  background:#121218;padding:22px;
+  width:90%;max-width:420px;border-radius:16px
+}
+input{
+  width:100%;padding:10px;margin:8px 0;
+  border:none;border-radius:8px
+}
+.district-select{
+  background:#1c1c25;
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:14px;
+  cursor:pointer;
+}
+.district-select option{
+  background:#111;
+  color:#fff;
+}
+
+/* PAYMENT */
+.pay-options{display:flex;gap:10px;margin-top:10px}
+.pay-options button{
+  flex:1;padding:10px;border:none;
+  border-radius:20px;font-weight:600
+}
+.cash{background:#2ecc71;color:#000;cursor:pointer}
+
+/* QR */
+.qr-box{
+  display:none;
+  margin-top:15px;
+  background:#0b0b12;
+  padding:15px;
+  border-radius:14px;
+  text-align:center;
+}
+.qr-box img{width:180px;margin:10px 0}
+.qr-note{font-size:13px;color:#bbb}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">NRS Movies</div>
+ <div class="menu">
+  <a href="index.html">Home</a>
+  <a href="movie.html">Movies</a>
+  <a href="event.html">Events</a>
+  <a href="contact.html">Contact</a>
+
+
+  <select class="district-select" onchange="goDistrict(this)">
+    <option value="">Select District</option>
+    <option value="Chennai">Chennai</option>
+    <option value="Coimbatore">Coimbatore</option>
+    <option value="Madurai">Madurai</option>
+    <option value="Salem">Salem</option>
+    <option value="Tiruchirappalli">Tiruchirappalli</option>
+    <option value="Erode">Erode</option>
+    <option value="Tiruppur">Tiruppur</option>
+    <option value="Vellore">Vellore</option>
+    <option value="Thoothukudi">Thoothukudi</option>
+    <option value="Tirunelveli">Tirunelveli</option>
+    <option value="Thanjavur">Thanjavur</option>
+    <option value="Dindigul">Dindigul</option>
+    <option value="Kanchipuram">Kanchipuram</option>
+  </select>
+
+
+
+</div>
+  <div class="search">
+    <input id="search" placeholder="Search movie...">
+  </div>
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-track">
+    <!-- SET 1 -->
+    <img src="https://images8.alphacoders.com/118/1180819.jpg">
+    <img src="https://tse2.mm.bing.net/th/id/OIP.-vNnegTNhQ0PLeZU6ayApgHaDt?pid=Api&P=0&h=180">
+    <img src=" https://tse4.mm.bing.net/th?id=OIF.%2fR0zAMwifUrkytc5GYuzQw&pid=Api&P=0&h=180">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREo9B7xS9hCo3qACKqf2HvDILb4JCq34Ux3g&s">
+
+    <!-- SET 2 (DUPLICATE – REQUIRED) -->
+    <img src="https://i.ytimg.com/vi/UOM40CZtTYc/maxresdefault.jpg">
+    <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba">
+    <img src="https://tse2.mm.bing.net/th/id/OIP.xdQyHi7A1amk7YxzjS-OgQHaEK?pid=Api&P=0&h=180">
+    <img src="https://tse2.mm.bing.net/th/id/OIP.xdQyHi7A1amk7YxzjS-OgQHaEK?pid=Api&P=0&h=180">
+  </div>
+</div>
+
+
+<!-- MOVIES -->
+<div class="grid" id="grid"></div>
+
+<!-- MODAL -->
+  <div class="modal-box">
+    <h2>Booking Details</h2>
+    <div id="info"></div>
+
+    <input id="uname" placeholder="Full Name">
+    <input id="email" placeholder="Email">
+    <input id="phone" placeholder="Phone">
+
+    <div class="pay-options">
+      <button class="cash" onclick="showQR()">booking</button>
+    </div>
+
+    <div class="qr-box" id="qrBox">
+      <p><b>Booking QR refrance</b></p>
+      <img id="qrImg">
+      <p class="qr-note">Scan to view booking details</p>
+      <button onclick="confirmBooking()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const movies=[
+  {name:"Demon slayer",place:"collge ",price:300,img:"https://images8.alphacoders.com/118/1180819.jpg"},
+  {name:"jana nayagan",place:"PVR Chennai",price:250,img:"https://th-i.thgim.com/public/entertainment/movies/6vtbo6/article69142705.ece/alternates/LANDSCAPE_1200/Jana%20Nayagan.jpeg"},
+  {name:"Fast and Furious 11 ",place:"INOX Coimbatore",price:280,img:"https://tse4.mm.bing.net/th/id/OIP.DJPDoegpzg_0mtX7MEccHgHaEK?pid=Api&P=0&h=180"},
+  {name:"DOCTOR DOOM",place:"PVR Madurai",price:220,img:"https://i.ytimg.com/vi/77TRc1mrhaE/maxresdefault.jpg"}
+];
+
+let selected=null;
+const grid=document.getElementById("grid");
+const modal=document.getElementById("modal");
+const info=document.getElementById("info");
+const qrBox=document.getElementById("qrBox");
+const qrImg=document.getElementById("qrImg");
+
+function load(filter=""){
+  grid.innerHTML="";
+  movies.filter(m=>m.name.toLowerCase().includes(filter.toLowerCase()))
+  .forEach((m,i)=>{
+    grid.innerHTML+=`
+    <div class="card">
+      <div class="poster" style="background-image:url('${m.img}')"></div>
+      <div class="card-body">
+        <h3>${m.name}</h3>
+        <p>${m.place}</p>
+        <p>₹${m.price}</p>
+        <button onclick="book(${i})">Book</button>
+      </div>
+    </div>`;
+  });
+}
+
+function book(i){
+  selected=movies[i];
+  info.innerHTML=`
+    <p>
+      <b>${selected.name}</b><br>
+      ${selected.place}<br>
+      Price: ₹${selected.price}
+    </p>`;
+  qrBox.style.display="none";
+  modal.style.display="flex";
+}
+
+function showQR(){
+  if(!uname.value || !email.value || !phone.value){
+    alert("Fill all details");
+    return;
+  }
+
+  const data = `
+NRS MOVIE TICKET (DEMO)
+Movie: ${selected.name}
+Theatre: ${selected.place}
+Price: ₹${selected.price}
+Name: ${uname.value}
+Phone: ${phone.value}
+`;
+
+  qrImg.src =
+    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+    encodeURIComponent(data);
+
+  qrBox.style.display="block";
+}
+
+function goDistrict(select){
+  if(select.value !== ""){
+    window.location.href = "index.html";
+  }
+}
+
+
+function confirmBooking(){
+  alert("Booking Confirmed (Demo)");
+  modal.style.display="none";
+}
+
+search.oninput=e=>load(e.target.value);
+window.onclick=e=>{if(e.target===modal)modal.style.display="none"};
+load();
+</script>
+
+</body>
+</html>
