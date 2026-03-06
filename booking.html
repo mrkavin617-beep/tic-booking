@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Booking</title>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+<style>
+
+body{
+
+margin:0;
+
+color:white;
+
+font-family:Inter;
+
+background:
+radial-gradient(circle,#ff000044,#000),
+linear-gradient(130deg,#000,#200000,#000);
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+.box{
+
+background:#111;
+
+padding:40px;
+
+border-radius:20px;
+
+width:300px;
+
+text-align:center;
+
+}
+
+input{
+
+width:100%;
+
+padding:10px;
+
+margin:10px 0;
+
+border:none;
+
+border-radius:8px;
+
+}
+
+button{
+
+padding:12px;
+
+width:100%;
+
+background:#e50914;
+
+color:white;
+
+border:none;
+
+border-radius:20px;
+
+cursor:pointer;
+
+}
+
+#qr{
+
+margin-top:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Enter Details</h2>
+
+<input id="name" placeholder="Name">
+
+<input id="mail" placeholder="Email">
+
+<input id="phone" placeholder="Phone">
+
+<button onclick="book()">Book</button>
+
+<div id="qr"></div>
+
+</div>
+
+<script>
+
+const movie=JSON.parse(localStorage.getItem("movie"));
+
+function book(){
+
+const name=document.getElementById("name").value;
+
+const mail=document.getElementById("mail").value;
+
+const phone=document.getElementById("phone").value;
+
+if(!name||!mail||!phone){
+
+alert("Fill all details");
+
+return;
+
+}
+
+const data=
+
+`Movie:${movie.name}
+Theatre:${movie.place}
+Name:${name}
+Phone:${phone}`;
+
+document.getElementById("qr").innerHTML="";
+
+new QRCode(document.getElementById("qr"),{
+
+text:data,
+
+width:180,
+
+height:180
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
